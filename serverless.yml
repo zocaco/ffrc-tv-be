@@ -1,0 +1,33 @@
+service: news-backend
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-north-1
+
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "dynamodb:Scan"
+          Resource: 
+              - arn:aws:dynamodb:eu-north-1:*:table/NewsHighlights
+              - arn:aws:dynamodb:eu-north-1:*:table/NewsHeadlines
+
+functions:
+  headlines:
+    handler: handler.headlines
+    events:
+      - http:
+          path: headlines
+          method: get
+          cors: true
+
+  reportPanel:
+    handler: handler.reportPanel
+    events:
+      - http:
+          path: report-panel
+          method: get
+          cors: true
